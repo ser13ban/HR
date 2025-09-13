@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using HrAPI.Models;
 
 namespace HrAPI.Data;
 
-public class HrDbContext : DbContext
+public class HrDbContext : IdentityDbContext<Employee, IdentityRole<int>, int>
 {
     public HrDbContext(DbContextOptions<HrDbContext> options) : base(options)
     {
@@ -20,13 +22,11 @@ public class HrDbContext : DbContext
         // Employee configuration
         modelBuilder.Entity<Employee>(entity =>
         {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Email).IsRequired().HasMaxLength(255);
-            entity.HasIndex(e => e.Email).IsUnique();
             entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
             entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.Department).HasMaxLength(100);
+            entity.Property(e => e.Team).HasMaxLength(100);
+            entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.Position).HasMaxLength(100);
             entity.Property(e => e.Bio).HasMaxLength(500);
             entity.Property(e => e.ProfilePictureUrl).HasMaxLength(255);
@@ -91,100 +91,17 @@ public class HrDbContext : DbContext
     {
         var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         
-        // Seed employees
-        modelBuilder.Entity<Employee>().HasData(
-            new Employee
-            {
-                Id = 1,
-                FirstName = "John",
-                LastName = "Doe",
-                Email = "john.doe@company.com",
-                PhoneNumber = "+1234567890",
-                Department = "Engineering",
-                Position = "Senior Developer",
-                HireDate = new DateTime(2020, 1, 15),
-                Bio = "Experienced software developer with expertise in .NET and Angular.",
-                Role = EmployeeRole.Manager,
-                CreatedAt = seedDate,
-                UpdatedAt = seedDate
-            },
-            new Employee
-            {
-                Id = 2,
-                FirstName = "Jane",
-                LastName = "Smith",
-                Email = "jane.smith@company.com",
-                PhoneNumber = "+1234567891",
-                Department = "Engineering",
-                Position = "Developer",
-                HireDate = new DateTime(2021, 3, 10),
-                Bio = "Passionate about clean code and user experience.",
-                Role = EmployeeRole.Employee,
-                CreatedAt = seedDate,
-                UpdatedAt = seedDate
-            },
-            new Employee
-            {
-                Id = 3,
-                FirstName = "Mike",
-                LastName = "Johnson",
-                Email = "mike.johnson@company.com",
-                PhoneNumber = "+1234567892",
-                Department = "HR",
-                Position = "HR Manager",
-                HireDate = new DateTime(2019, 6, 1),
-                Bio = "Dedicated to creating a positive work environment.",
-                Role = EmployeeRole.Manager,
-                CreatedAt = seedDate,
-                UpdatedAt = seedDate
-            }
+        // Seed default roles
+        modelBuilder.Entity<IdentityRole<int>>().HasData(
+            new IdentityRole<int> { Id = 1, Name = "Employee", NormalizedName = "EMPLOYEE" },
+            new IdentityRole<int> { Id = 2, Name = "Manager", NormalizedName = "MANAGER" },
+            new IdentityRole<int> { Id = 3, Name = "Admin", NormalizedName = "ADMIN" }
         );
 
-        // Seed absence requests
-        modelBuilder.Entity<AbsenceRequest>().HasData(
-            new AbsenceRequest
-            {
-                Id = 1,
-                EmployeeId = 2,
-                StartDate = new DateTime(2024, 12, 20),
-                EndDate = new DateTime(2024, 12, 22),
-                Type = AbsenceType.Vacation,
-                Reason = "Family vacation",
-                Status = AbsenceStatus.Approved,
-                ApprovedById = 1,
-                ApprovedAt = new DateTime(2024, 12, 1),
-                CreatedAt = seedDate,
-                UpdatedAt = seedDate
-            },
-            new AbsenceRequest
-            {
-                Id = 2,
-                EmployeeId = 2,
-                StartDate = new DateTime(2024, 12, 25),
-                EndDate = new DateTime(2024, 12, 25),
-                Type = AbsenceType.SickLeave,
-                Reason = "Doctor appointment",
-                Status = AbsenceStatus.Pending,
-                CreatedAt = seedDate,
-                UpdatedAt = seedDate
-            }
-        );
-
-        // Seed feedback
-        modelBuilder.Entity<Feedback>().HasData(
-            new Feedback
-            {
-                Id = 1,
-                FromEmployeeId = 1,
-                ToEmployeeId = 2,
-                Content = "Jane is an excellent team player with great communication skills.",
-                Type = FeedbackType.Collaboration,
-                Rating = 9,
-                IsAnonymous = false,
-                IsPolished = false,
-                CreatedAt = seedDate,
-                UpdatedAt = seedDate
-            }
-        );
+        // Note: Employee seeding will be handled through the AuthService during registration
+        // or through a separate data seeding service to properly handle password hashing
+        
+        // Note: AbsenceRequest and Feedback seed data removed since they depend on employees
+        // These can be added later once employees are properly seeded with Identity
     }
 }

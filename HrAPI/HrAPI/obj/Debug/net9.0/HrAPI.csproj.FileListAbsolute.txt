@@ -133,3 +133,17 @@
 /Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/obj/Debug/net9.0/HrAPI.xml
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.AspNetCore.Cryptography.Internal.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.Bcl.TimeProvider.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.Extensions.Identity.Core.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.Extensions.Identity.Stores.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/Users/mserban/Documents/Repos/HR/HrAPI/HrAPI/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll

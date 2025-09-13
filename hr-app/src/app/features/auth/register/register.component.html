@@ -1,0 +1,164 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h1>Create Account</h1>
+      <p>Join our HR management system</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <!-- General Error Message -->
+      @if (error()) {
+        <div class="error-message general-error">
+          {{ error() }}
+        </div>
+      }
+
+      <!-- Required Fields Section -->
+      <div class="form-section">
+        <h3>Required Information</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input
+              type="text"
+              id="firstName"
+              formControlName="firstName"
+              [class.error]="hasFieldError('firstName')"
+              placeholder="Enter your first name"
+            >
+            @if (hasFieldError('firstName')) {
+              <div class="error-message">{{ getFieldError('firstName') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input
+              type="text"
+              id="lastName"
+              formControlName="lastName"
+              [class.error]="hasFieldError('lastName')"
+              placeholder="Enter your last name"
+            >
+            @if (hasFieldError('lastName')) {
+              <div class="error-message">{{ getFieldError('lastName') }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            [class.error]="hasFieldError('email')"
+            placeholder="Enter your email address"
+          >
+          @if (hasFieldError('email')) {
+            <div class="error-message">{{ getFieldError('email') }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            [class.error]="hasFieldError('password')"
+            placeholder="Enter your password (min. 6 characters)"
+          >
+          @if (hasFieldError('password')) {
+            <div class="error-message">{{ getFieldError('password') }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="role">Role *</label>
+          <select
+            id="role"
+            formControlName="role"
+            [class.error]="hasFieldError('role')"
+          >
+            @for (option of roleOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          @if (hasFieldError('role')) {
+            <div class="error-message">{{ getFieldError('role') }}</div>
+          }
+        </div>
+      </div>
+
+      <!-- Optional Fields Section -->
+      <div class="form-section">
+        <h3>Additional Information (Optional)</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="department">Department</label>
+            <input
+              type="text"
+              id="department"
+              formControlName="department"
+              [class.error]="hasFieldError('department')"
+              placeholder="e.g., Engineering, HR, Marketing"
+            >
+            @if (hasFieldError('department')) {
+              <div class="error-message">{{ getFieldError('department') }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="team">Team</label>
+            <input
+              type="text"
+              id="team"
+              formControlName="team"
+              [class.error]="hasFieldError('team')"
+              placeholder="e.g., Frontend, Backend, DevOps"
+            >
+            @if (hasFieldError('team')) {
+              <div class="error-message">{{ getFieldError('team') }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            [class.error]="hasFieldError('description')"
+            placeholder="Tell us a bit about yourself and your role..."
+            rows="3"
+          ></textarea>
+          @if (hasFieldError('description')) {
+            <div class="error-message">{{ getFieldError('description') }}</div>
+          }
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="submit-button"
+        [disabled]="isLoading()"
+      >
+        @if (isLoading()) {
+          <span class="loading-spinner"></span>
+          Creating Account...
+        } @else {
+          Create Account
+        }
+      </button>
+    </form>
+
+    <!-- Login Link -->
+    <div class="auth-links">
+      <p>Already have an account? <a routerLink="/login">Sign in here</a></p>
+    </div>
+  </div>
+</div>

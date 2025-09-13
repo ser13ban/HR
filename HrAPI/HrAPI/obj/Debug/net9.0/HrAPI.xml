@@ -4,6 +4,32 @@
         <name>HrAPI</name>
     </assembly>
     <members>
+        <member name="T:HrAPI.Controllers.AuthController">
+            <summary>
+            Controller for authentication operations
+            </summary>
+        </member>
+        <member name="M:HrAPI.Controllers.AuthController.Register(HrAPI.DTOs.RegisterRequestDto)">
+            <summary>
+            Register a new user
+            </summary>
+            <param name="request">Registration request containing user details</param>
+            <returns>Authentication response with JWT token</returns>
+        </member>
+        <member name="M:HrAPI.Controllers.AuthController.Login(HrAPI.DTOs.LoginRequestDto)">
+            <summary>
+            Login with email and password
+            </summary>
+            <param name="request">Login request containing credentials</param>
+            <returns>Authentication response with JWT token</returns>
+        </member>
+        <member name="M:HrAPI.Controllers.AuthController.ValidateToken(System.String)">
+            <summary>
+            Validate JWT token
+            </summary>
+            <param name="token">JWT token to validate</param>
+            <returns>Validation result</returns>
+        </member>
         <member name="M:HrAPI.Controllers.TestController.GetEmployees">
             <summary>
             Retrieves all employees with their related data
@@ -34,16 +60,16 @@
             <returns>A list of all feedback records</returns>
             <response code="200">Returns the list of feedback records</response>
         </member>
-        <member name="T:HrAPI.Migrations.InitialCreate">
+        <member name="T:HrAPI.Migrations.InitialCreateWithIdentity">
             <inheritdoc />
         </member>
-        <member name="M:HrAPI.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:HrAPI.Migrations.InitialCreateWithIdentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:HrAPI.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:HrAPI.Migrations.InitialCreateWithIdentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:HrAPI.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:HrAPI.Migrations.InitialCreateWithIdentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace HrAPI.Models;
 
-public class Employee
+public class Employee : IdentityUser<int>
 {
-    public int Id { get; set; }
-    
     [Required]
     [MaxLength(100)]
     public string FirstName { get; set; } = string.Empty;
@@ -14,16 +13,17 @@ public class Employee
     [MaxLength(100)]
     public string LastName { get; set; } = string.Empty;
     
-    [Required]
-    [EmailAddress]
-    [MaxLength(255)]
-    public string Email { get; set; } = string.Empty;
-    
     [MaxLength(20)]
     public string? PhoneNumber { get; set; }
     
     [MaxLength(100)]
     public string? Department { get; set; }
+    
+    [MaxLength(100)]
+    public string? Team { get; set; }
+    
+    [MaxLength(1000)]
+    public string? Description { get; set; }
     
     [MaxLength(100)]
     public string? Position { get; set; }
@@ -48,7 +48,7 @@ public class Employee
     public virtual ICollection<Feedback> ReceivedFeedback { get; set; } = new List<Feedback>();
     
     // Computed properties
-    public string FullName => $"{FirstName} {LastName}";
+    public string FullName => $"{FirstName} {LastName}".Trim();
 }
 
 public enum EmployeeRole
