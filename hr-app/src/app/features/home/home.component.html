@@ -40,6 +40,14 @@
             </div>
           }
         </div>
+        <div class="profile-actions">
+          <button (click)="navigateToProfile()" class="profile-button">
+            <svg class="profile-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            View My Profile
+          </button>
+        </div>
       </div>
     }
     <div class="actions">
@@ -52,73 +60,8 @@
     </div>
   </div>
   
-  <div class="features-section">
-    <h3>Available Features</h3>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
-          </svg>
-        </div>
-        <h4>Employee Management</h4>
-        <p>Manage employee profiles, contact information, and organizational structure</p>
-        <div class="feature-status">Coming Soon</div>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a4 4 0 118 0v4m-4 12v-2m-6 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
-          </svg>
-        </div>
-        <h4>Absence Requests</h4>
-        <p>Submit, track, and manage time-off requests with approval workflows</p>
-        <div class="feature-status">Coming Soon</div>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
-          </svg>
-        </div>
-        <h4>Feedback System</h4>
-        <p>Give and receive constructive feedback from colleagues and managers</p>
-        <div class="feature-status">Coming Soon</div>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 00-2-2z"/>
-          </svg>
-        </div>
-        <h4>Analytics & Reports</h4>
-        <p>Generate comprehensive reports and insights on HR metrics</p>
-        <div class="feature-status">Coming Soon</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="quick-stats">
-    <h3>Quick Overview</h3>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-number">1</div>
-        <div class="stat-label">Active User</div>
-        <div class="stat-description">You are currently logged in</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">0</div>
-        <div class="stat-label">Pending Requests</div>
-        <div class="stat-description">No pending absence requests</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">0</div>
-        <div class="stat-label">Unread Feedback</div>
-        <div class="stat-description">No new feedback available</div>
-      </div>
-    </div>
-  </div>
+
+  <!-- Co-workers Grid -->
+  <app-co-workers-grid></app-co-workers-grid>
 </div>

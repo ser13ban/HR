@@ -27,6 +27,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent)
   },
+  {
+    path: 'profile/:id',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent)
+  },
 
   // Wildcard route - redirect to home
   {

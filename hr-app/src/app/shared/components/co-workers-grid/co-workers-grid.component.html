@@ -1,0 +1,56 @@
+<div class="co-workers-grid-container">
+  <h2 class="grid-title">Co-workers</h2>
+  
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading co-workers...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="error-container">
+    <div class="error-icon">⚠️</div>
+    <p class="error-message">{{ error() }}</p>
+    <button class="retry-button" (click)="onRetry()">Try Again</button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading() && !error() && employees().length === 0" class="empty-container">
+    <div class="empty-icon">👥</div>
+    <p class="empty-message">No co-workers found</p>
+  </div>
+
+  <!-- Employees Grid -->
+  <div *ngIf="!loading() && !error() && employees().length > 0" class="employees-grid">
+    <div class="employee-card" *ngFor="let employee of employees(); trackBy: trackByEmployeeId">
+      <div class="employee-avatar">
+        <img 
+          [src]="getProfilePictureUrl(employee)" 
+          [alt]="employee.fullName"
+          class="avatar-image"
+          (error)="$event.target.src = '/assets/images/default-avatar.svg'"
+        />
+      </div>
+      
+      <div class="employee-info">
+        <h3 class="employee-name">{{ employee.fullName }}</h3>
+        <p class="employee-position">{{ employee.position }}</p>
+        <p class="employee-department">{{ employee.department }}</p>
+        <p class="employee-team" *ngIf="employee.team && employee.team !== 'Not Assigned'">
+          Team: {{ employee.team }}
+        </p>
+        <span class="employee-role">{{ getRoleDisplayName(employee.role) }}</span>
+      </div>
+      
+      <div class="employee-actions">
+        <button 
+          class="see-profile-button"
+          (click)="onSeeProfile(employee.id)"
+          [attr.aria-label]="'View profile of ' + employee.fullName"
+        >
+          See Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

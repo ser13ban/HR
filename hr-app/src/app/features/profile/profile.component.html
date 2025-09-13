@@ -1,0 +1,135 @@
+<div class="profile-container">
+  <!-- Header with back button -->
+  <div class="profile-header">
+    <button class="back-button" (click)="onGoBack()" aria-label="Go back to home">
+      <span class="back-icon">←</span>
+      Back to Home
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading profile...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="error-container">
+    <div class="error-icon">⚠️</div>
+    <p class="error-message">{{ error() }}</p>
+    <button class="retry-button" (click)="onRetry()">Try Again</button>
+  </div>
+
+  <!-- Profile Content -->
+  <div *ngIf="employee() && !loading() && !error()" class="profile-content">
+    <div class="profile-card">
+      <!-- Profile Header -->
+      <div class="profile-card-header">
+        <div class="profile-avatar">
+          <img 
+            [src]="getProfilePictureUrl(employee()!)" 
+            [alt]="employee()!.fullName"
+            class="avatar-image"
+            (error)="$event.target.src = '/assets/images/default-avatar.svg'"
+          />
+        </div>
+        <div class="profile-basic-info">
+          <h1 class="profile-name">{{ employee()!.fullName }}</h1>
+          <p class="profile-position">{{ employee()!.position }}</p>
+          <span class="profile-role">{{ getRoleDisplayName(employee()!.role) }}</span>
+          <div *ngIf="isOwnProfile()" class="own-profile-badge">
+            Your Profile
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Details -->
+      <div class="profile-details">
+        <div class="details-section">
+          <h2 class="section-title">Work Information</h2>
+          <div class="details-grid">
+            <div class="detail-item">
+              <label class="detail-label">Department</label>
+              <span class="detail-value">{{ employee()!.department }}</span>
+            </div>
+            <div class="detail-item">
+              <label class="detail-label">Team</label>
+              <span class="detail-value">{{ employee()!.team }}</span>
+            </div>
+            <div class="detail-item">
+              <label class="detail-label">Position</label>
+              <span class="detail-value">{{ employee()!.position }}</span>
+            </div>
+            <div class="detail-item">
+              <label class="detail-label">Start Date</label>
+              <span class="detail-value">{{ formatDate(employee()!.startDate) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Information (only if not limited view) -->
+        <div *ngIf="shouldShowField(employee()!, 'email')" class="details-section">
+          <h2 class="section-title">Contact Information</h2>
+          <div class="details-grid">
+            <div class="detail-item" *ngIf="employee()!.email">
+              <label class="detail-label">Email</label>
+              <span class="detail-value">
+                <a [href]="'mailto:' + employee()!.email" class="email-link">
+                  {{ employee()!.email }}
+                </a>
+              </span>
+            </div>
+            <div class="detail-item" *ngIf="employee()!.phoneNumber">
+              <label class="detail-label">Phone</label>
+              <span class="detail-value">
+                <a [href]="'tel:' + employee()!.phoneNumber" class="phone-link">
+                  {{ employee()!.phoneNumber }}
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Information (only if not limited view) -->
+        <div *ngIf="shouldShowField(employee()!, 'dateOfBirth') && (employee()!.dateOfBirth || employee()!.address)" class="details-section">
+          <h2 class="section-title">Personal Information</h2>
+          <div class="details-grid">
+            <div class="detail-item" *ngIf="employee()!.dateOfBirth">
+              <label class="detail-label">Date of Birth</label>
+              <span class="detail-value">{{ formatDate(employee()!.dateOfBirth!) }}</span>
+            </div>
+            <div class="detail-item" *ngIf="employee()!.address">
+              <label class="detail-label">Address</label>
+              <span class="detail-value">{{ employee()!.address }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency Contact (only if not limited view) -->
+        <div *ngIf="shouldShowField(employee()!, 'emergencyContact') && (employee()!.emergencyContact || employee()!.emergencyPhone)" class="details-section">
+          <h2 class="section-title">Emergency Contact</h2>
+          <div class="details-grid">
+            <div class="detail-item" *ngIf="employee()!.emergencyContact">
+              <label class="detail-label">Contact Name</label>
+              <span class="detail-value">{{ employee()!.emergencyContact }}</span>
+            </div>
+            <div class="detail-item" *ngIf="employee()!.emergencyPhone">
+              <label class="detail-label">Contact Phone</label>
+              <span class="detail-value">
+                <a [href]="'tel:' + employee()!.emergencyPhone" class="phone-link">
+                  {{ employee()!.emergencyPhone }}
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Limited View Notice -->
+        <div *ngIf="employee()!.isLimitedView" class="limited-view-notice">
+          <div class="notice-icon">🔒</div>
+          <p>You're viewing limited profile information. Contact your manager or HR for full access.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

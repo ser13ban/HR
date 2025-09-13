@@ -126,10 +126,10 @@ app.UseHttpsRedirection();
 // Use CORS
 app.UseCors("AllowAngularApp");
 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseRouting();
 
 app.MapControllers();
 
