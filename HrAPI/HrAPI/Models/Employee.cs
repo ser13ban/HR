@@ -36,6 +36,17 @@ public class Employee : IdentityUser<int>
     [MaxLength(255)]
     public string? ProfilePictureUrl { get; set; }
     
+    public DateTime? DateOfBirth { get; set; }
+    
+    [MaxLength(500)]
+    public string? Address { get; set; }
+    
+    [MaxLength(100)]
+    public string? EmergencyContact { get; set; }
+    
+    [MaxLength(20)]
+    public string? EmergencyPhone { get; set; }
+    
     public EmployeeRole Role { get; set; } = EmployeeRole.Employee;
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

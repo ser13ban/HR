@@ -14,7 +14,7 @@ public class EmployeeProfileDto
     public DateTime StartDate { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public string Role { get; set; } = string.Empty;
-    public DateTime? DateOfBirth { get; set; }
+    public string? DateOfBirth { get; set; }
     public string? Address { get; set; }
     public string? EmergencyContact { get; set; }
     public string? EmergencyPhone { get; set; }

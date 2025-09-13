@@ -138,10 +138,10 @@ public class EmployeeController : ControllerBase
             dto.Email = employee.Email ?? string.Empty;
             dto.PhoneNumber = employee.PhoneNumber;
             dto.StartDate = employee.HireDate ?? employee.CreatedAt;
-            dto.DateOfBirth = null; // Not implemented in Employee model yet
-            dto.Address = null; // Not implemented in Employee model yet
-            dto.EmergencyContact = null; // Not implemented in Employee model yet
-            dto.EmergencyPhone = null; // Not implemented in Employee model yet
+            dto.DateOfBirth = employee.DateOfBirth?.ToString("yyyy-MM-dd");
+            dto.Address = employee.Address;
+            dto.EmergencyContact = employee.EmergencyContact;
+            dto.EmergencyPhone = employee.EmergencyPhone;
         }
         else
         {
@@ -156,5 +156,90 @@ public class EmployeeController : ControllerBase
         }
 
         return dto;
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<EmployeeProfileDto>> UpdateEmployee(string id, [FromBody] UpdateEmployeeDto updateDto)
+    {
+        try
+        {
+            // Parse the employee ID
+            if (!int.TryParse(id, out var employeeId))
+            {
+                return BadRequest("Invalid employee ID format");
+            }
+
+            // Get the requesting user's ID and role
+            var currentUserIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(currentUserIdClaim, out var currentUserId))
+            {
+                return Unauthorized("Invalid user token");
+            }
+
+            var currentUser = await _userManager.FindByIdAsync(currentUserId.ToString());
+            if (currentUser == null)
+            {
+                return Unauthorized("User not found");
+            }
+
+            // Check permissions: can edit own profile OR manager/admin can edit any profile
+            var canEdit = currentUserId == employeeId || 
+                         currentUser.Role == EmployeeRole.Manager || 
+                         currentUser.Role == EmployeeRole.Admin;
+
+            if (!canEdit)
+            {
+                return Forbid("You don't have permission to edit this profile");
+            }
+
+            // Get the employee to update
+            var employee = await _userManager.FindByIdAsync(employeeId.ToString());
+            if (employee == null)
+            {
+                return NotFound("Employee not found");
+            }
+
+            // Validate model state
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Update employee properties (excluding sensitive fields like Role, CreatedAt)
+            employee.FirstName = updateDto.FirstName;
+            employee.LastName = updateDto.LastName;
+            employee.Email = updateDto.Email;
+            employee.UserName = updateDto.Email; // Keep UserName in sync with Email
+            employee.PhoneNumber = updateDto.PhoneNumber;
+            employee.Department = updateDto.Department;
+            employee.Team = updateDto.Team;
+            employee.Position = updateDto.Position;
+            employee.Bio = updateDto.Bio;
+            employee.ProfilePictureUrl = updateDto.ProfilePictureUrl;
+            employee.DateOfBirth = updateDto.DateOfBirth;
+            employee.Address = updateDto.Address;
+            employee.EmergencyContact = updateDto.EmergencyContact;
+            employee.EmergencyPhone = updateDto.EmergencyPhone;
+            employee.UpdatedAt = DateTime.UtcNow;
+
+            // Save changes
+            var result = await _userManager.UpdateAsync(employee);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return BadRequest($"Failed to update employee: {errors}");
+            }
+
+            // Return updated profile with appropriate permissions
+            var isLimitedView = DetermineIfLimitedView(currentUserId, employeeId, currentUser.Role);
+            var updatedDto = MapToProfileDto(employee, isLimitedView);
+
+            return Ok(updatedDto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating employee profile for ID: {EmployeeId}", id);
+            return StatusCode(500, "An error occurred while updating the employee profile");
+        }
     }
 }

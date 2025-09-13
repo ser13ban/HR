@@ -29,3 +29,19 @@ export interface EmployeeProfile {
   emergencyPhone?: string;
   isLimitedView: boolean;
 }
+
+export interface UpdateEmployeeRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  department?: string;
+  team?: string;
+  position?: string;
+  bio?: string;
+  profilePictureUrl?: string;
+  dateOfBirth?: string;
+  address?: string;
+  emergencyContact?: string;
+  emergencyPhone?: string;
+}

@@ -1,0 +1,10 @@
+{
+  "firstName": "Test",
+  "lastName": "Manager",
+  "email": "test.manager@example.com",
+  "password": "testpass123",
+  "role": 1,
+  "department": "Management",
+  "team": "Leadership",
+  "description": "Test manager account"
+}

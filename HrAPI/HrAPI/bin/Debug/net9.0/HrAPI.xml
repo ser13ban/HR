@@ -72,5 +72,17 @@
         <member name="M:HrAPI.Migrations.InitialCreateWithIdentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:HrAPI.Migrations.AddPersonalDataFieldsToEmployee">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.AddPersonalDataFieldsToEmployee.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.AddPersonalDataFieldsToEmployee.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.AddPersonalDataFieldsToEmployee.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
