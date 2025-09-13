@@ -14,8 +14,9 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         // Configure to accept enums as numbers (default behavior)
-        // Remove JsonStringEnumConverter to allow numeric enum values
+        // Allow string to number conversion for enums
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString;
     });
 
 // Add CORS
@@ -114,6 +115,7 @@ builder.Services.AddAuthorization();
 // Register custom services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+builder.Services.AddScoped<IAbsenceService, AbsenceService>();
 
 var app = builder.Build();
 

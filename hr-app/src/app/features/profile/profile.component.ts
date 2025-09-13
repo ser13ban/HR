@@ -323,6 +323,10 @@ export class ProfileComponent implements OnInit {
     this.showGiveFeedbackModal.set(false);
   }
 
+  onViewAbsenceRequests(): void {
+    this.router.navigate(['/absence']);
+  }
+
   getEmployeeIdAsNumber(): number {
     const employee = this.employee();
     return employee ? parseInt(employee.id) : 0;

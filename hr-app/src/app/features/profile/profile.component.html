@@ -60,6 +60,12 @@
             <span class="feedback-icon">⭐</span>
             Give Feedback
           </button>
+          
+          <!-- Absence Button -->
+          <button *ngIf="isOwnProfile()" class="absence-button" (click)="onViewAbsenceRequests()" type="button">
+            <span class="absence-icon">📅</span>
+            Absence Requests
+          </button>
         </div>
         
         <!-- Edit Actions -->

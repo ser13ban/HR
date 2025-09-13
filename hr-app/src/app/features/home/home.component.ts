@@ -31,6 +31,17 @@ export class HomeComponent {
     }
   }
 
+  navigateToAbsences(): void {
+    this.router.navigate(['/absence']);
+  }
+
+  navigateToFeedback(): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser) {
+      this.router.navigate(['/feedback', currentUser.id.toString()]);
+    }
+  }
+
   getRoleDisplayName(role: EmployeeRole): string {
     switch (role) {
       case EmployeeRole.Employee:

@@ -37,6 +37,16 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     loadComponent: () => import('./features/feedback/feedback-list/feedback-list.component').then(m => m.FeedbackListComponent)
   },
+  {
+    path: 'absence',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./features/absence/absence-page/absence-page.component').then(m => m.AbsencePageComponent)
+  },
+  {
+    path: 'absence/:employeeId',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./features/absence/absence-page/absence-page.component').then(m => m.AbsencePageComponent)
+  },
 
   // Wildcard route - redirect to home
   {
