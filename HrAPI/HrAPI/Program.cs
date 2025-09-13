@@ -10,7 +10,13 @@ using HrAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Configure to accept enums as numbers (default behavior)
+        // Remove JsonStringEnumConverter to allow numeric enum values
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -107,6 +113,7 @@ builder.Services.AddAuthorization();
 
 // Register custom services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 var app = builder.Build();
 

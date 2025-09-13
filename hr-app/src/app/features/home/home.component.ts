@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { EmployeeRole } from '../../core/models/auth.models';
 import { CoWorkersGridComponent } from '../../shared/components/co-workers-grid/co-workers-grid.component';
 
 @Component({
@@ -30,8 +31,16 @@ export class HomeComponent {
     }
   }
 
-  getRoleDisplayName(role: number): string {
-    const roleNames = ['Employee', 'Manager', 'Admin'];
-    return roleNames[role] || 'Unknown';
+  getRoleDisplayName(role: EmployeeRole): string {
+    switch (role) {
+      case EmployeeRole.Employee:
+        return 'Employee';
+      case EmployeeRole.Manager:
+        return 'Manager';
+      case EmployeeRole.Admin:
+        return 'Admin';
+      default:
+        return 'Unknown';
+    }
   }
 }

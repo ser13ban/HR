@@ -42,11 +42,23 @@
           </div>
         </div>
         
-        <!-- Edit Button -->
-        <div *ngIf="canEdit() && !isEditing()" class="profile-actions">
-          <button class="edit-button" (click)="toggleEditMode()" type="button">
+        <!-- Action Buttons -->
+        <div *ngIf="!isEditing()" class="profile-actions">
+          <!-- Edit Button -->
+          <button *ngIf="canEdit()" class="edit-button" (click)="toggleEditMode()" type="button">
             <span class="edit-icon">✏️</span>
             Edit Profile
+          </button>
+          
+          <!-- Feedback Buttons -->
+          <button *ngIf="canViewFeedback()" class="feedback-button view-feedback" (click)="onViewFeedback()" type="button">
+            <span class="feedback-icon">💬</span>
+            {{ isOwnProfile() ? 'View My Feedback' : 'View Feedback' }}
+          </button>
+          
+          <button *ngIf="canGiveFeedback()" class="feedback-button give-feedback" (click)="onGiveFeedback()" type="button">
+            <span class="feedback-icon">⭐</span>
+            Give Feedback
           </button>
         </div>
         
@@ -351,4 +363,14 @@
       </div>
     </div>
   </div>
+
+  <!-- Give Feedback Modal -->
+  <app-give-feedback 
+    *ngIf="employee()"
+    [toEmployeeId]="getEmployeeIdAsNumber()"
+    [toEmployeeName]="employee()!.fullName"
+    [isVisible]="showGiveFeedbackModal()"
+    (feedbackSubmitted)="onFeedbackSubmitted()"
+    (modalClosed)="onGiveFeedbackModalClosed()"
+  ></app-give-feedback>
 </div>

@@ -1,0 +1,112 @@
+<div class="feedback-list-container">
+  <div class="header">
+    <button class="back-button" (click)="goBack()">
+      <i class="icon-arrow-left"></i>
+      Back to Profile
+    </button>
+    <h1>{{ isOwnProfile() ? 'My Feedback' : 'Feedback' }}</h1>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading feedback...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <div class="error-message">
+        <i class="icon-alert-circle"></i>
+        <p>{{ error() }}</p>
+      </div>
+      <button class="retry-button" (click)="loadFeedback()">
+        Try Again
+      </button>
+    </div>
+  } @else {
+    @if (feedbacks().length === 0) {
+      <div class="no-feedback">
+        <div class="empty-state">
+          <i class="icon-message-circle"></i>
+          <h3>No feedback yet</h3>
+          <p>{{ isOwnProfile() ? 'You haven\'t received any feedback yet.' : 'This employee hasn\'t received any feedback yet.' }}</p>
+        </div>
+      </div>
+    } @else {
+      <div class="feedback-summary">
+        <div class="summary-card">
+          <div class="summary-item">
+            <span class="summary-label">Total Feedback</span>
+            <span class="summary-value">{{ feedbacks().length }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Average Rating</span>
+            <div class="rating-display">
+              <span class="summary-value">{{ averageRating() }}</span>
+              <div class="stars">
+                @for (star of getRatingStars(averageRating()); track $index) {
+                  <span class="star" [class.filled]="star === '★'">{{ star }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feedback-content">
+        @for (type of getObjectKeys(feedbackByType()); track type) {
+          @if (feedbackByType()[+type] && feedbackByType()[+type].length > 0) {
+            <div class="feedback-type-section">
+              <h3 class="type-header">
+                <span class="type-badge" [attr.data-type]="type">
+                  {{ getTypeLabel(+type) }}
+                </span>
+                <span class="count">({{ feedbackByType()[+type].length }})</span>
+              </h3>
+              
+              <div class="feedback-cards">
+                @for (feedback of feedbackByType()[+type]; track feedback.id) {
+                  <div class="feedback-card">
+                    <div class="feedback-header">
+                      <div class="feedback-meta">
+                        <span class="from-employee" [class.anonymous]="feedback.isAnonymous">
+                          {{ feedback.fromEmployeeName }}
+                        </span>
+                        <span class="feedback-date">{{ formatDate(feedback.createdAt) }}</span>
+                      </div>
+                      <div class="feedback-rating">
+                        <div class="rating-stars">
+                          @for (star of getRatingStars(feedback.rating); track $index) {
+                            <span class="star" [class.filled]="star === '★'">{{ star }}</span>
+                          }
+                        </div>
+                        <span class="rating-number">{{ feedback.rating }}/10</span>
+                      </div>
+                    </div>
+                    
+                    <div class="feedback-content-text">
+                      @if (feedback.isPolished && feedback.polishedContent) {
+                        <div class="polished-content">
+                          <div class="polished-badge">
+                            <i class="icon-sparkles"></i>
+                            AI Enhanced
+                          </div>
+                          <p>{{ feedback.polishedContent }}</p>
+                        </div>
+                        <details class="original-content">
+                          <summary>View Original</summary>
+                          <p>{{ feedback.content }}</p>
+                        </details>
+                      } @else {
+                        <p>{{ feedback.content }}</p>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+  }
+</div>

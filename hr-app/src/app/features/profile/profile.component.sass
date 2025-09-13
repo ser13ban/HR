@@ -267,6 +267,7 @@
   display: flex
   gap: 1rem
   align-items: center
+  flex-wrap: wrap
 
 .edit-button
   display: inline-flex
@@ -291,6 +292,47 @@
     outline-offset: 2px
 
 .edit-icon
+  font-size: 1rem
+
+// Feedback Buttons
+.feedback-button
+  display: inline-flex
+  align-items: center
+  gap: 0.5rem
+  padding: 0.75rem 1.5rem
+  border-radius: 0.5rem
+  cursor: pointer
+  font-weight: 500
+  font-size: 0.875rem
+  transition: all 0.2s
+  border: 2px solid transparent
+
+  &:hover
+    transform: translateY(-1px)
+
+  &:focus
+    outline: 2px solid white
+    outline-offset: 2px
+
+  &.view-feedback
+    background-color: rgba(0, 123, 255, 0.9)
+    border-color: rgba(0, 123, 255, 1)
+    color: white
+
+    &:hover
+      background-color: rgba(0, 123, 255, 1)
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3)
+
+  &.give-feedback
+    background-color: rgba(40, 167, 69, 0.9)
+    border-color: rgba(40, 167, 69, 1)
+    color: white
+
+    &:hover
+      background-color: rgba(40, 167, 69, 1)
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3)
+
+.feedback-icon
   font-size: 1rem
 
 .edit-actions
@@ -435,7 +477,7 @@
     align-items: stretch
     gap: 0.75rem
 
-  .edit-button, .save-button, .cancel-button
+  .edit-button, .feedback-button, .save-button, .cancel-button
     width: 100%
     justify-content: center
 
@@ -447,7 +489,7 @@
     margin: 1rem 1rem 0
 
 @media (max-width: 480px)
-  .edit-button, .save-button, .cancel-button
+  .edit-button, .feedback-button, .save-button, .cancel-button
     padding: 1rem
     font-size: 1rem
 

@@ -1,0 +1,112 @@
+@if (isVisible) {
+  <div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Give Feedback to {{ toEmployeeName }}</h2>
+        <button class="close-button" (click)="closeModal()" type="button">
+          <i class="icon-x"></i>
+        </button>
+      </div>
+
+      <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" class="feedback-form">
+        <div class="form-group">
+          <label for="type" class="form-label">Feedback Type</label>
+          <select id="type" formControlName="type" class="form-select">
+            @for (type of feedbackTypes; track type) {
+              <option [value]="type" [selected]="type === FeedbackType.General">{{ getTypeLabel(type) }}</option>
+            }
+          </select>
+          @if (getFieldError('type')) {
+            <div class="error-message">{{ getFieldError('type') }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="rating" class="form-label">Rating (1-10)</label>
+          <div class="rating-container">
+            <div class="rating-stars">
+              @for (star of getRatingStars(selectedRating()); track $index) {
+                <button 
+                  type="button"
+                  class="star-button"
+                  [class.filled]="star === '★'"
+                  (click)="setRating($index + 1)"
+                >
+                  {{ star }}
+                </button>
+              }
+            </div>
+            <div class="rating-display">
+              <span class="rating-number">{{ selectedRating() }}/10</span>
+            </div>
+          </div>
+          @if (getFieldError('rating')) {
+            <div class="error-message">{{ getFieldError('rating') }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="content" class="form-label">
+            Feedback Content
+            <span class="character-count">{{ getCharacterCount() }}/1000</span>
+          </label>
+          <textarea 
+            id="content"
+            formControlName="content"
+            class="form-textarea"
+            rows="6"
+            placeholder="Share your feedback about {{ toEmployeeName }}'s work, collaboration, or any other aspects you'd like to highlight..."
+          ></textarea>
+          @if (getFieldError('content')) {
+            <div class="error-message">{{ getFieldError('content') }}</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-container">
+            <input 
+              type="checkbox" 
+              formControlName="isAnonymous"
+              class="form-checkbox"
+            >
+            <span class="checkmark"></span>
+            <span class="checkbox-label">Submit as anonymous feedback</span>
+          </label>
+          <p class="help-text">
+            When anonymous, your name won't be shown to the recipient, but the feedback will still be recorded.
+          </p>
+        </div>
+
+        @if (error()) {
+          <div class="error-container">
+            <i class="icon-alert-circle"></i>
+            <span>{{ error() }}</span>
+          </div>
+        }
+
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="cancel-button"
+            (click)="closeModal()"
+            [disabled]="isSubmitting()"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="submit-button"
+            [disabled]="feedbackForm.invalid || isSubmitting()"
+          >
+            @if (isSubmitting()) {
+              <span class="spinner"></span>
+              Submitting...
+            } @else {
+              Submit Feedback
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

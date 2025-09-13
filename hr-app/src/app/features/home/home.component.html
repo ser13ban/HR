@@ -11,7 +11,7 @@
           </div>
           <div class="detail-item">
             <span class="label">Role:</span>
-            <span class="value role-badge" [class]="'role-' + user.role.toString().toLowerCase()">
+            <span class="value role-badge" [class]="'role-' + getRoleDisplayName(user.role).toLowerCase()">
               {{ getRoleDisplayName(user.role) }}
             </span>
           </div>

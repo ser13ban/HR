@@ -4,13 +4,15 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../../core/services/employee.service';
 import { AuthService } from '../../core/services/auth.service';
+import { FeedbackService } from '../../core/services/feedback.service';
 import { EmployeeProfile, UpdateEmployeeRequest } from '../../core/models/employee.models';
 import { EmployeeRole } from '../../core/models/auth.models';
+import { GiveFeedbackComponent } from '../feedback/give-feedback/give-feedback.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, GiveFeedbackComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.sass']
 })
@@ -19,6 +21,7 @@ export class ProfileComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly employeeService = inject(EmployeeService);
   private readonly authService = inject(AuthService);
+  private readonly feedbackService = inject(FeedbackService);
   private readonly formBuilder = inject(FormBuilder);
 
   // Reactive state using signals
@@ -31,6 +34,11 @@ export class ProfileComponent implements OnInit {
   canEdit = signal<boolean>(false);
   saving = signal<boolean>(false);
   saveError = signal<string | null>(null);
+  
+  // Feedback-related state
+  canViewFeedback = signal<boolean>(false);
+  canGiveFeedback = signal<boolean>(false);
+  showGiveFeedbackModal = signal<boolean>(false);
 
   // Form for editing
   editForm: FormGroup;
@@ -82,6 +90,7 @@ export class ProfileComponent implements OnInit {
       next: (employee) => {
         this.employee.set(employee);
         this.populateEditForm(employee);
+        this.loadFeedbackPermissions(parseInt(employeeId));
         this.loading.set(false);
       },
       error: (error) => {
@@ -267,5 +276,55 @@ export class ProfileComponent implements OnInit {
     // For limited view, only show certain fields
     const allowedFields = ['firstName', 'lastName', 'fullName', 'department', 'team', 'position', 'role', 'startDate'];
     return allowedFields.includes(fieldName);
+  }
+
+  // Feedback-related methods
+  private loadFeedbackPermissions(employeeId: number): void {
+    // Load feedback permissions
+    this.feedbackService.canViewFeedback(employeeId).subscribe({
+      next: (canView) => {
+        this.canViewFeedback.set(canView);
+      },
+      error: (error) => {
+        console.error('Error checking view feedback permission:', error);
+        this.canViewFeedback.set(false);
+      }
+    });
+
+    this.feedbackService.canGiveFeedback(employeeId).subscribe({
+      next: (canGive) => {
+        this.canGiveFeedback.set(canGive);
+      },
+      error: (error) => {
+        console.error('Error checking give feedback permission:', error);
+        this.canGiveFeedback.set(false);
+      }
+    });
+  }
+
+  onViewFeedback(): void {
+    const employee = this.employee();
+    if (employee) {
+      this.router.navigate(['/feedback', employee.id]);
+    }
+  }
+
+  onGiveFeedback(): void {
+    this.showGiveFeedbackModal.set(true);
+  }
+
+  onFeedbackSubmitted(): void {
+    // Feedback was successfully submitted
+    // Could show a success message or refresh data if needed
+    console.log('Feedback submitted successfully');
+  }
+
+  onGiveFeedbackModalClosed(): void {
+    this.showGiveFeedbackModal.set(false);
+  }
+
+  getEmployeeIdAsNumber(): number {
+    const employee = this.employee();
+    return employee ? parseInt(employee.id) : 0;
   }
 }
