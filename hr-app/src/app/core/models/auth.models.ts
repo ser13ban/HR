@@ -3,6 +3,7 @@ export interface RegisterRequest {
   lastName: string;
   email: string;
   password: string;
+  confirmPassword: string;
   role: EmployeeRole;
   department?: string;
   team?: string;

@@ -59,6 +59,7 @@ export class AuthService {
   }
 
   register(request: RegisterRequest): Observable<AuthResponse> {
+    // Send the request as-is to the backend - backend will validate password confirmation
     return this.http.post<AuthResponse>(`${this.API_URL}/register`, request)
       .pipe(
         tap(response => this.handleAuthSuccess(response)),

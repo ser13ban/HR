@@ -1,6 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest, EmployeeRole, ApiError } from '../../../core/models/auth.models';
@@ -36,6 +36,7 @@ export class RegisterComponent {
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
+      confirmPassword: ['', [Validators.required]],
       role: [EmployeeRole.Employee, [Validators.required]],
       department: ['', [Validators.maxLength(100)]],
       team: ['', [Validators.maxLength(100)]],
@@ -44,7 +45,10 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (this.registerForm.valid) {
+    // Check if passwords match before submission
+    const passwordsMatch = this.registerForm.value.password === this.registerForm.value.confirmPassword;
+    
+    if (this.registerForm.valid && passwordsMatch) {
       this.isLoading.set(true);
       this.error.set(null);
       this.fieldErrors.set({});
@@ -54,6 +58,7 @@ export class RegisterComponent {
         lastName: this.registerForm.value.lastName.trim(),
         email: this.registerForm.value.email.trim().toLowerCase(),
         password: this.registerForm.value.password,
+        confirmPassword: this.registerForm.value.confirmPassword, // Still needed for frontend interface
         role: this.registerForm.value.role,
         department: this.registerForm.value.department?.trim() || undefined,
         team: this.registerForm.value.team?.trim() || undefined,
@@ -110,6 +115,14 @@ export class RegisterComponent {
       return fieldErrors[fieldName];
     }
 
+    // Check for password confirmation mismatch
+    if (fieldName === 'confirmPassword' && control?.value && control?.touched) {
+      const passwordControl = this.registerForm.get('password');
+      if (passwordControl?.value && control.value !== passwordControl.value) {
+        return 'Passwords do not match';
+      }
+    }
+
     // Check for client-side validation errors
     if (control?.invalid && (control?.dirty || control?.touched)) {
       const errors = control.errors;
@@ -136,6 +149,7 @@ export class RegisterComponent {
       lastName: 'Last name',
       email: 'Email',
       password: 'Password',
+      confirmPassword: 'Confirm password',
       role: 'Role',
       department: 'Department',
       team: 'Team',

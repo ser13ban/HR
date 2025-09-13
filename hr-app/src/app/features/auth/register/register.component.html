@@ -76,6 +76,20 @@
         </div>
 
         <div class="form-group">
+          <label for="confirmPassword">Confirm Password *</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            [class.error]="hasFieldError('confirmPassword')"
+            placeholder="Confirm your password"
+          >
+          @if (hasFieldError('confirmPassword')) {
+            <div class="error-message">{{ getFieldError('confirmPassword') }}</div>
+          }
+        </div>
+
+        <div class="form-group">
           <label for="role">Role *</label>
           <select
             id="role"
