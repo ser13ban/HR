@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HrAPI</name>
+    </assembly>
+    <members>
+        <member name="M:HrAPI.Controllers.TestController.GetEmployees">
+            <summary>
+            Retrieves all employees with their related data
+            </summary>
+            <returns>A list of all employees including absence requests and feedback</returns>
+            <response code="200">Returns the list of employees</response>
+        </member>
+        <member name="M:HrAPI.Controllers.TestController.GetEmployee(System.Int32)">
+            <summary>
+            Retrieves a specific employee by ID
+            </summary>
+            <param name="id">The employee ID</param>
+            <returns>The employee with related data</returns>
+            <response code="200">Returns the requested employee</response>
+            <response code="404">If the employee is not found</response>
+        </member>
+        <member name="M:HrAPI.Controllers.TestController.GetAbsenceRequests">
+            <summary>
+            Retrieves all absence requests with related employee data
+            </summary>
+            <returns>A list of all absence requests</returns>
+            <response code="200">Returns the list of absence requests</response>
+        </member>
+        <member name="M:HrAPI.Controllers.TestController.GetFeedbacks">
+            <summary>
+            Retrieves all feedback records with related employee data
+            </summary>
+            <returns>A list of all feedback records</returns>
+            <response code="200">Returns the list of feedback records</response>
+        </member>
+        <member name="T:HrAPI.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
