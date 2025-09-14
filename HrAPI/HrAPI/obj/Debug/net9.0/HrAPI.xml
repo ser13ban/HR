@@ -30,6 +30,32 @@
             <param name="token">JWT token to validate</param>
             <returns>Validation result</returns>
         </member>
+        <member name="T:HrAPI.Controllers.EmployeeController">
+            <summary>
+            Controller for employee operations
+            </summary>
+        </member>
+        <member name="M:HrAPI.Controllers.EmployeeController.GetAllEmployees">
+            <summary>
+            Get all employees
+            </summary>
+            <returns>List of all employees</returns>
+        </member>
+        <member name="M:HrAPI.Controllers.EmployeeController.GetEmployeeById(System.String)">
+            <summary>
+            Get employee by ID
+            </summary>
+            <param name="id">Employee ID</param>
+            <returns>Employee profile</returns>
+        </member>
+        <member name="M:HrAPI.Controllers.EmployeeController.UpdateEmployee(System.String,HrAPI.DTOs.UpdateEmployeeDto)">
+            <summary>
+            Update employee profile
+            </summary>
+            <param name="id">Employee ID</param>
+            <param name="updateDto">Updated employee data</param>
+            <returns>Updated employee profile</returns>
+        </member>
         <member name="M:HrAPI.Controllers.TestController.GetEmployees">
             <summary>
             Retrieves all employees with their related data

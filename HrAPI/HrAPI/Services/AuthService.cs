@@ -32,105 +32,89 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
     {
-        try
+        // Check if user already exists
+        var existingUser = await _userManager.FindByEmailAsync(request.Email);
+        if (existingUser != null)
         {
-            // Check if user already exists
-            var existingUser = await _userManager.FindByEmailAsync(request.Email);
-            if (existingUser != null)
-            {
-                throw new InvalidOperationException("User with this email already exists");
-            }
-
-            // Create new employee
-            var employee = new Employee
-            {
-                UserName = request.Email,
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Department = request.Department,
-                Team = request.Team,
-                Description = request.Description,
-                Role = request.Role,
-                EmailConfirmed = true // For simplicity, auto-confirm email
-            };
-
-            // Create user with Identity
-            var result = await _userManager.CreateAsync(employee, request.Password);
-            if (!result.Succeeded)
-            {
-                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new InvalidOperationException($"Failed to create user: {errors}");
-            }
-
-            // Assign role
-            var roleName = request.Role.ToString();
-            if (!await _roleManager.RoleExistsAsync(roleName))
-            {
-                await _roleManager.CreateAsync(new IdentityRole<int> { Name = roleName });
-            }
-
-            await _userManager.AddToRoleAsync(employee, roleName);
-
-            // Generate JWT token
-            var token = await GenerateJwtTokenAsync(employee.Id, employee.Email!, roleName);
-            var expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpireMinutes"));
-
-            return new AuthResponseDto
-            {
-                Token = token,
-                Expires = expires,
-                User = MapToUserDto(employee)
-            };
+            throw new InvalidOperationException("User with this email already exists");
         }
-        catch (Exception ex)
+
+        // Create new employee
+        var employee = new Employee
         {
-            _logger.LogError(ex, "Error occurred during user registration");
-            throw;
+            UserName = request.Email,
+            Email = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Department = request.Department,
+            Team = request.Team,
+            Description = request.Description,
+            Role = request.Role,
+            EmailConfirmed = true // For simplicity, auto-confirm email
+        };
+
+        // Create user with Identity
+        var result = await _userManager.CreateAsync(employee, request.Password);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"Failed to create user: {errors}");
         }
+
+        // Assign role
+        var roleName = request.Role.ToString();
+        if (!await _roleManager.RoleExistsAsync(roleName))
+        {
+            await _roleManager.CreateAsync(new IdentityRole<int> { Name = roleName });
+        }
+
+        await _userManager.AddToRoleAsync(employee, roleName);
+
+        // Generate JWT token
+        var token = await GenerateJwtTokenAsync(employee.Id, employee.Email!, roleName);
+        var expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpireMinutes"));
+
+        return new AuthResponseDto
+        {
+            Token = token,
+            Expires = expires,
+            User = MapToUserDto(employee)
+        };
     }
 
     public async Task<AuthResponseDto> LoginAsync(LoginRequestDto request)
     {
-        try
+        // Find user by email
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
         {
-            // Find user by email
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("Invalid email or password");
-            }
-
-            // Check password
-            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-            if (!result.Succeeded)
-            {
-                throw new UnauthorizedAccessException("Invalid email or password");
-            }
-
-            // Get user roles
-            var roles = await _userManager.GetRolesAsync(user);
-            var primaryRole = roles.FirstOrDefault() ?? "Employee";
-
-            // Generate JWT token
-            var token = await GenerateJwtTokenAsync(user.Id, user.Email!, primaryRole);
-            var expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpireMinutes"));
-
-            return new AuthResponseDto
-            {
-                Token = token,
-                Expires = expires,
-                User = MapToUserDto(user)
-            };
+            throw new UnauthorizedAccessException("Invalid email or password");
         }
-        catch (Exception ex)
+
+        // Check password
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+        if (!result.Succeeded)
         {
-            _logger.LogError(ex, "Error occurred during user login");
-            throw;
+            throw new UnauthorizedAccessException("Invalid email or password");
         }
+
+        // Get user roles
+        var roles = await _userManager.GetRolesAsync(user);
+        var primaryRole = roles.FirstOrDefault() ?? "Employee";
+
+        // Generate JWT token
+        var token = await GenerateJwtTokenAsync(user.Id, user.Email!, primaryRole);
+        var expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpireMinutes"));
+
+        return new AuthResponseDto
+        {
+            Token = token,
+            Expires = expires,
+            User = MapToUserDto(user)
+        };
     }
 
-    public async Task<string> GenerateJwtTokenAsync(int userId, string email, string role)
+    public Task<string> GenerateJwtTokenAsync(int userId, string email, string role)
     {
         var jwtKey = _configuration["Jwt:Key"];
         var jwtIssuer = _configuration["Jwt:Issuer"];
@@ -162,7 +146,7 @@ public class AuthService : IAuthService
             signingCredentials: credentials
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
     }
 
     public async Task<bool> ValidateTokenAsync(string token)

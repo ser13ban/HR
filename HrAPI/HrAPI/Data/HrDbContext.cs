@@ -80,7 +80,7 @@ public class HrDbContext : IdentityDbContext<Employee, IdentityRole<int>, int>
                   .OnDelete(DeleteBehavior.Cascade);
 
             // Ensure an employee cannot give feedback to themselves
-            entity.HasCheckConstraint("CK_Feedback_SelfReference", "FromEmployeeId != ToEmployeeId");
+            entity.ToTable(t => t.HasCheckConstraint("CK_Feedback_SelfReference", "FromEmployeeId != ToEmployeeId"));
         });
 
         // Seed data

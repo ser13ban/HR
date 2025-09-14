@@ -14,7 +14,7 @@ public class Employee : IdentityUser<int>
     public string LastName { get; set; } = string.Empty;
     
     [MaxLength(20)]
-    public string? PhoneNumber { get; set; }
+    public new string? PhoneNumber { get; set; }
     
     [MaxLength(100)]
     public string? Department { get; set; }
