@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../../core/services/employee.service';
 import { AuthService } from '../../core/services/auth.service';
 import { FeedbackService } from '../../core/services/feedback.service';
+import { UtilityService } from '../../shared/services/utility.service';
 import { EmployeeProfile, UpdateEmployeeRequest } from '../../core/models/employee.models';
 import { EmployeeRole } from '../../core/models/auth.models';
 import { GiveFeedbackComponent } from '../feedback/give-feedback/give-feedback.component';
@@ -23,6 +24,7 @@ export class ProfileComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly feedbackService = inject(FeedbackService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly utilityService = inject(UtilityService);
 
   // Reactive state using signals
   employee = signal<EmployeeProfile | null>(null);
@@ -239,33 +241,15 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfilePictureUrl(employee: EmployeeProfile): string {
-    return employee.profilePictureUrl || '/assets/images/default-avatar.svg';
+    return this.utilityService.getProfilePictureUrl(employee);
   }
 
   getRoleDisplayName(role: string): string {
-    switch (role.toLowerCase()) {
-      case 'admin':
-        return 'Administrator';
-      case 'manager':
-        return 'Manager';
-      case 'employee':
-        return 'Employee';
-      default:
-        return role;
-    }
+    return this.utilityService.getRoleDisplayName(role);
   }
 
   formatDate(dateString: string): string {
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    } catch {
-      return 'Not available';
-    }
+    return this.utilityService.formatDate(dateString);
   }
 
   shouldShowField(employee: EmployeeProfile, fieldName: string): boolean {

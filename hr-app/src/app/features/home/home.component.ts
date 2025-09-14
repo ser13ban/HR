@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { UtilityService } from '../../shared/services/utility.service';
 import { EmployeeRole } from '../../core/models/auth.models';
 import { CoWorkersGridComponent } from '../../shared/components/co-workers-grid/co-workers-grid.component';
 
@@ -15,6 +16,7 @@ import { CoWorkersGridComponent } from '../../shared/components/co-workers-grid/
 export class HomeComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private utilityService = inject(UtilityService);
 
   get currentUser() {
     return this.authService.currentUser;
@@ -43,13 +45,6 @@ export class HomeComponent {
   }
 
   getRoleDisplayName(role: EmployeeRole): string {
-    switch (role) {
-      case EmployeeRole.Employee:
-        return 'Employee';
-      case EmployeeRole.Manager:
-        return 'Manager';
-      default:
-        return 'Unknown';
-    }
+    return this.utilityService.getRoleDisplayName(role);
   }
 }

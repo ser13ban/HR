@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbsenceService } from '../../../core/services/absence.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { UtilityService } from '../../../shared/services/utility.service';
 import { 
   AbsenceRequest, 
   CreateAbsenceRequest, 
@@ -29,6 +30,7 @@ export class AbsencePageComponent implements OnInit {
   private readonly absenceService = inject(AbsenceService);
   private readonly authService = inject(AuthService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly utilityService = inject(UtilityService);
 
   // Reactive state using signals
   myRequests = signal<AbsenceRequest[]>([]);
@@ -286,14 +288,11 @@ export class AbsencePageComponent implements OnInit {
   }
 
   formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString();
+    return this.utilityService.formatDate(dateString, 'simple');
   }
 
   calculateDuration(startDate: string, endDate: string): number {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diffTime = Math.abs(end.getTime() - start.getTime());
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return this.utilityService.calculateDaysBetween(startDate, endDate);
   }
 
   getAbsenceTypeOptions(): { value: AbsenceType; label: string }[] {

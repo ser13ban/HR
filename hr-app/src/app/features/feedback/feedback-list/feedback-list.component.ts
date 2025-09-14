@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FeedbackService } from '../../../core/services/feedback.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { UtilityService } from '../../../shared/services/utility.service';
 import { FeedbackListDto, FeedbackType, FeedbackTypeLabels } from '../../../core/models/feedback.models';
 
 @Component({
@@ -17,6 +18,7 @@ export class FeedbackListComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly utilityService = inject(UtilityService);
 
   feedbacks = signal<FeedbackListDto[]>([]);
   loading = signal<boolean>(false);
@@ -89,12 +91,7 @@ export class FeedbackListComponent implements OnInit {
   }
 
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    return this.utilityService.formatDate(dateString, 'short');
   }
 
   getRatingStars(rating: number): string[] {

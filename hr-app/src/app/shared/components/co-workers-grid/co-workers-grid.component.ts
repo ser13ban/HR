@@ -2,6 +2,7 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../../../core/services/employee.service';
+import { UtilityService } from '../../services/utility.service';
 import { EmployeeListItem } from '../../../core/models/employee.models';
 
 @Component({
@@ -14,6 +15,7 @@ import { EmployeeListItem } from '../../../core/models/employee.models';
 export class CoWorkersGridComponent implements OnInit {
   private readonly employeeService = inject(EmployeeService);
   private readonly router = inject(Router);
+  private readonly utilityService = inject(UtilityService);
 
   // Reactive state using signals
   employees = signal<EmployeeListItem[]>([]);
@@ -50,18 +52,11 @@ export class CoWorkersGridComponent implements OnInit {
   }
 
   getProfilePictureUrl(employee: EmployeeListItem): string {
-    return employee.profilePictureUrl || '/assets/images/default-avatar.svg';
+    return this.utilityService.getProfilePictureUrl(employee);
   }
 
   getRoleDisplayName(role: string): string {
-    switch (role.toLowerCase()) {
-      case 'manager':
-        return 'Manager';
-      case 'employee':
-        return 'Employee';
-      default:
-        return role;
-    }
+    return this.utilityService.getRoleDisplayName(role);
   }
 
   trackByEmployeeId(index: number, employee: EmployeeListItem): string {
