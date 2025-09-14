@@ -41,7 +41,6 @@ export interface User {
 export enum EmployeeRole {
   Employee = 0,
   Manager = 1,
-  Admin = 2
 }
 
 export interface ValidationError {

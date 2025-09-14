@@ -48,8 +48,6 @@ export class HomeComponent {
         return 'Employee';
       case EmployeeRole.Manager:
         return 'Manager';
-      case EmployeeRole.Admin:
-        return 'Admin';
       default:
         return 'Unknown';
     }

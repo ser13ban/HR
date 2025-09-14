@@ -80,7 +80,7 @@ export class AbsencePageComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     // Check if user is manager and get user ID
     const currentUser = this.authService.currentUser();
-    this.isManager.set(currentUser?.role === EmployeeRole.Manager || currentUser?.role === EmployeeRole.Admin);
+    this.isManager.set(currentUser?.role === EmployeeRole.Manager);
     this.currentUserId.set(currentUser?.id || 0);
 
     await this.loadData();

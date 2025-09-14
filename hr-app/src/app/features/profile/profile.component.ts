@@ -80,11 +80,11 @@ export class ProfileComponent implements OnInit {
     // Check if this is the current user's profile and set permissions
     const currentUser = this.authService.getCurrentUser();
     const isOwnProfile = currentUser?.id.toString() === employeeId;
-    const isManagerOrAdmin = currentUser?.role === EmployeeRole.Manager || currentUser?.role === EmployeeRole.Admin;
+    const isManager = currentUser?.role === EmployeeRole.Manager;
     
     this.isOwnProfile.set(isOwnProfile);
-    this.isManager.set(isManagerOrAdmin);
-    this.canEdit.set(isOwnProfile || isManagerOrAdmin);
+    this.isManager.set(isManager);
+    this.canEdit.set(isOwnProfile || isManager);
 
     this.employeeService.getEmployeeById(employeeId).subscribe({
       next: (employee) => {

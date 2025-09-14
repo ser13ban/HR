@@ -55,8 +55,6 @@ export class CoWorkersGridComponent implements OnInit {
 
   getRoleDisplayName(role: string): string {
     switch (role.toLowerCase()) {
-      case 'admin':
-        return 'Administrator';
       case 'manager':
         return 'Manager';
       case 'employee':

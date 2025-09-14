@@ -27,7 +27,6 @@ export class RegisterComponent {
   roleOptions = [
     { value: EmployeeRole.Employee, label: 'Employee' },
     { value: EmployeeRole.Manager, label: 'Manager' },
-    { value: EmployeeRole.Admin, label: 'Admin' }
   ];
 
   constructor() {
