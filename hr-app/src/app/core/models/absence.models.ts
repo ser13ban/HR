@@ -32,8 +32,7 @@ export enum AbsenceType {
   Vacation = 0,
   SickLeave = 1,
   PersonalLeave = 2,
-  Bereavement = 3,
-  Other = 4
+  Other = 3
 }
 
 export enum AbsenceStatus {
@@ -47,7 +46,6 @@ export const AbsenceTypeLabels: Record<AbsenceType, string> = {
   [AbsenceType.Vacation]: 'Vacation',
   [AbsenceType.SickLeave]: 'Sick Leave',
   [AbsenceType.PersonalLeave]: 'Personal Leave',
-  [AbsenceType.Bereavement]: 'Bereavement',
   [AbsenceType.Other]: 'Other'
 };
 

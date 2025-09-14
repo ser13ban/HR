@@ -179,7 +179,7 @@ public class FeedbackService : IFeedbackService
 
         // Check if requesting user is a manager
         var requestingUser = await _context.Employees.FindAsync(requestingUserId);
-        if (requestingUser?.Role == EmployeeRole.Manager || requestingUser?.Role == EmployeeRole.Admin)
+        if (requestingUser?.Role == EmployeeRole.Manager)
         {
             return true;
         }

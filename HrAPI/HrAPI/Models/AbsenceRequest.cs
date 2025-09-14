@@ -47,8 +47,7 @@ public enum AbsenceType
     Vacation = 0,
     SickLeave = 1,
     PersonalLeave = 2,
-    Bereavement = 3,
-    Other = 4
+    Other = 3
 }
 
 public enum AbsenceStatus

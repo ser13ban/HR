@@ -84,5 +84,29 @@
         <member name="M:HrAPI.Migrations.AddPersonalDataFieldsToEmployee.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:HrAPI.Migrations.RemoveBereavementAbsenceType">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.RemoveBereavementAbsenceType.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.RemoveBereavementAbsenceType.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.RemoveBereavementAbsenceType.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:HrAPI.Migrations.RemoveAdminRole">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.RemoveAdminRole.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.RemoveAdminRole.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:HrAPI.Migrations.RemoveAdminRole.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

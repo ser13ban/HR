@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { UtilityService } from '../../services/utility.service';
 import { EmployeeListItem } from '../../../core/models/employee.models';
+import { EmployeeRole } from '../../../core/models/auth.models';
 
 @Component({
   selector: 'app-co-workers-grid',
@@ -55,7 +56,7 @@ export class CoWorkersGridComponent implements OnInit {
     return this.utilityService.getProfilePictureUrl(employee);
   }
 
-  getRoleDisplayName(role: string): string {
+  getRoleDisplayName(role: EmployeeRole): string {
     return this.utilityService.getRoleDisplayName(role);
   }
 

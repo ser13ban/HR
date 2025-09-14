@@ -58,7 +58,7 @@ export class RegisterComponent {
         email: this.registerForm.value.email.trim().toLowerCase(),
         password: this.registerForm.value.password,
         confirmPassword: this.registerForm.value.confirmPassword, // Still needed for frontend interface
-        role: this.registerForm.value.role,
+        role: Number(this.registerForm.value.role), // Ensure role is a number
         department: this.registerForm.value.department?.trim() || undefined,
         team: this.registerForm.value.team?.trim() || undefined,
         description: this.registerForm.value.description?.trim() || undefined

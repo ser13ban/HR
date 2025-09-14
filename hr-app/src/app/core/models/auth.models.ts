@@ -40,8 +40,13 @@ export interface User {
 
 export enum EmployeeRole {
   Employee = 0,
-  Manager = 1,
+  Manager = 1
 }
+
+export const EmployeeRoleLabels: Record<EmployeeRole, string> = {
+  [EmployeeRole.Employee]: 'Employee',
+  [EmployeeRole.Manager]: 'Manager'
+};
 
 export interface ValidationError {
   field: string;

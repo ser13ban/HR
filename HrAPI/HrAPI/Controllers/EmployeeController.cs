@@ -39,7 +39,7 @@ public class EmployeeController : ControllerBase
                     Team = e.Team ?? "Not Assigned",
                     Position = e.Position ?? "Not Assigned",
                     ProfilePictureUrl = e.ProfilePictureUrl,
-                    Role = e.Role.ToString()
+                    Role = e.Role
                 })
                 .OrderBy(e => e.LastName)
                 .ThenBy(e => e.FirstName)
@@ -109,7 +109,7 @@ public class EmployeeController : ControllerBase
             return false;
 
         // If current user is Manager or Admin, full access to all profiles
-        if (currentUserRole == EmployeeRole.Manager || currentUserRole == EmployeeRole.Admin)
+        if (currentUserRole == EmployeeRole.Manager)
             return false;
 
         // Otherwise, limited view (co-worker accessing another's profile)
@@ -128,7 +128,7 @@ public class EmployeeController : ControllerBase
             Team = employee.Team ?? "Not Assigned",
             Position = employee.Position ?? "Not Assigned",
             ProfilePictureUrl = employee.ProfilePictureUrl,
-            Role = employee.Role.ToString(),
+            Role = employee.Role,
             IsLimitedView = isLimitedView
         };
 
@@ -184,8 +184,7 @@ public class EmployeeController : ControllerBase
 
             // Check permissions: can edit own profile OR manager/admin can edit any profile
             var canEdit = currentUserId == employeeId || 
-                         currentUser.Role == EmployeeRole.Manager || 
-                         currentUser.Role == EmployeeRole.Admin;
+                         currentUser.Role == EmployeeRole.Manager;
 
             if (!canEdit)
             {

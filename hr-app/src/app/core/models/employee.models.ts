@@ -1,3 +1,5 @@
+import { EmployeeRole } from './auth.models';
+
 export interface EmployeeListItem {
   id: string;
   firstName: string;
@@ -7,7 +9,7 @@ export interface EmployeeListItem {
   team: string;
   position: string;
   profilePictureUrl?: string;
-  role: string;
+  role: EmployeeRole;
 }
 
 export interface EmployeeProfile {
@@ -22,7 +24,7 @@ export interface EmployeeProfile {
   position: string;
   startDate: string;
   profilePictureUrl?: string;
-  role: string;
+  role: EmployeeRole;
   dateOfBirth?: string;
   address?: string;
   emergencyContact?: string;

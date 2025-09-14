@@ -1,3 +1,5 @@
+using HrAPI.Models;
+
 namespace HrAPI.DTOs;
 
 public class EmployeeListDto
@@ -10,5 +12,5 @@ public class EmployeeListDto
     public string Team { get; set; } = string.Empty;
     public string Position { get; set; } = string.Empty;
     public string? ProfilePictureUrl { get; set; }
-    public string Role { get; set; } = string.Empty;
+    public EmployeeRole Role { get; set; }
 }

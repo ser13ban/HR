@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { EmployeeRole } from '../../core/models/auth.models';
+import { EmployeeRole, EmployeeRoleLabels } from '../../core/models/auth.models';
+import { AbsenceType, AbsenceStatus, AbsenceTypeLabels, AbsenceStatusLabels } from '../../core/models/absence.models';
+import { FeedbackType, FeedbackTypeLabels } from '../../core/models/feedback.models';
 import { EmployeeListItem, EmployeeProfile } from '../../core/models/employee.models';
 
 @Injectable({
@@ -10,28 +12,29 @@ export class UtilityService {
   /**
    * Get display name for employee role
    */
-  getRoleDisplayName(role: string | EmployeeRole): string {
-    if (typeof role === 'string') {
-      switch (role.toLowerCase()) {
-        case 'admin':
-          return 'Administrator';
-        case 'manager':
-          return 'Manager';
-        case 'employee':
-          return 'Employee';
-        default:
-          return role;
-      }
-    } else {
-      switch (role) {
-        case EmployeeRole.Employee:
-          return 'Employee';
-        case EmployeeRole.Manager:
-          return 'Manager';
-        default:
-          return 'Unknown';
-      }
-    }
+  getRoleDisplayName(role: EmployeeRole): string {
+    return EmployeeRoleLabels[role] || 'Unknown';
+  }
+
+  /**
+   * Get display name for absence type
+   */
+  getAbsenceTypeDisplayName(type: AbsenceType): string {
+    return AbsenceTypeLabels[type] || 'Unknown';
+  }
+
+  /**
+   * Get display name for absence status
+   */
+  getAbsenceStatusDisplayName(status: AbsenceStatus): string {
+    return AbsenceStatusLabels[status] || 'Unknown';
+  }
+
+  /**
+   * Get display name for feedback type
+   */
+  getFeedbackTypeDisplayName(type: FeedbackType): string {
+    return FeedbackTypeLabels[type] || 'Unknown';
   }
 
   /**

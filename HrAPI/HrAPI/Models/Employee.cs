@@ -65,6 +65,5 @@ public class Employee : IdentityUser<int>
 public enum EmployeeRole
 {
     Employee = 0,
-    Manager = 1,
-    Admin = 2
+    Manager = 1
 }

@@ -244,7 +244,7 @@ export class ProfileComponent implements OnInit {
     return this.utilityService.getProfilePictureUrl(employee);
   }
 
-  getRoleDisplayName(role: string): string {
+  getRoleDisplayName(role: EmployeeRole): string {
     return this.utilityService.getRoleDisplayName(role);
   }
 

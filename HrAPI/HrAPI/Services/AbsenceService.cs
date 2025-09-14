@@ -232,7 +232,7 @@ public class AbsenceService : IAbsenceService
         var employee = await _context.Employees
             .FirstOrDefaultAsync(e => e.Id == employeeId);
 
-        return employee?.Role == EmployeeRole.Manager || employee?.Role == EmployeeRole.Admin;
+        return employee?.Role == EmployeeRole.Manager;
     }
 
     private static AbsenceRequestDto MapToDto(AbsenceRequest absenceRequest, bool excludeSensitiveInfo = false)
