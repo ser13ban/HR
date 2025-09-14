@@ -13,5 +13,4 @@ public interface IAbsenceService
     Task<AbsenceRequestDto> ApproveAbsenceRequestAsync(int requestId, int approverId, ApprovalActionDto approvalDto);
     Task<AbsenceRequestDto> DeclineAbsenceRequestAsync(int requestId, int approverId, ApprovalActionDto approvalDto);
     Task<bool> CancelAbsenceRequestAsync(int requestId, int employeeId);
-    Task<bool> IsEmployeeManagerAsync(int employeeId);
 }

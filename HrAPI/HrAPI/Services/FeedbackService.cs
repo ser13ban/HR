@@ -8,19 +8,18 @@ namespace HrAPI.Services;
 public class FeedbackService : IFeedbackService
 {
     private readonly HrDbContext _context;
+    private readonly IAuthorizationService _authorizationService;
 
-    public FeedbackService(HrDbContext context)
+    public FeedbackService(HrDbContext context, IAuthorizationService authorizationService)
     {
         _context = context;
+        _authorizationService = authorizationService;
     }
 
     public async Task<IEnumerable<FeedbackListDto>> GetReceivedFeedbackAsync(int employeeId, int requestingUserId)
     {
         // Check permissions first
-        if (!await CanUserViewFeedbackAsync(employeeId, requestingUserId))
-        {
-            throw new UnauthorizedAccessException("You are not authorized to view this feedback.");
-        }
+        await _authorizationService.RequireFeedbackViewPermissionAsync(requestingUserId, employeeId);
 
         var feedbacks = await _context.Feedbacks
             .Include(f => f.FromEmployee)
@@ -87,10 +86,10 @@ public class FeedbackService : IFeedbackService
         }
 
         // Check if user can view this feedback
-        var canView = await CanUserViewFeedbackAsync(feedback.ToEmployeeId, requestingUserId) ||
-                     feedback.FromEmployeeId == requestingUserId;
+        var canViewFeedback = await _authorizationService.CanViewFeedbackAsync(requestingUserId, feedback.ToEmployeeId);
+        var isOwnGivenFeedback = feedback.FromEmployeeId == requestingUserId;
 
-        if (!canView)
+        if (!canViewFeedback && !isOwnGivenFeedback)
         {
             throw new UnauthorizedAccessException("You are not authorized to view this feedback.");
         }
@@ -116,7 +115,8 @@ public class FeedbackService : IFeedbackService
     public async Task<FeedbackDetailDto> CreateFeedbackAsync(CreateFeedbackDto createFeedbackDto, int fromEmployeeId)
     {
         // Validate permissions
-        if (!await CanUserGiveFeedbackAsync(createFeedbackDto.ToEmployeeId, fromEmployeeId))
+        var canGiveFeedback = await _authorizationService.CanGiveFeedbackAsync(fromEmployeeId, createFeedbackDto.ToEmployeeId);
+        if (!canGiveFeedback)
         {
             throw new UnauthorizedAccessException("You cannot give feedback to this employee.");
         }
@@ -167,38 +167,5 @@ public class FeedbackService : IFeedbackService
             CreatedAt = feedback.CreatedAt,
             UpdatedAt = feedback.UpdatedAt
         };
-    }
-
-    public async Task<bool> CanUserViewFeedbackAsync(int targetEmployeeId, int requestingUserId)
-    {
-        // Users can view their own received feedback
-        if (targetEmployeeId == requestingUserId)
-        {
-            return true;
-        }
-
-        // Check if requesting user is a manager
-        var requestingUser = await _context.Employees.FindAsync(requestingUserId);
-        if (requestingUser?.Role == EmployeeRole.Manager)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public async Task<bool> CanUserGiveFeedbackAsync(int toEmployeeId, int fromEmployeeId)
-    {
-        // Cannot give feedback to self
-        if (toEmployeeId == fromEmployeeId)
-        {
-            return false;
-        }
-
-        // Verify both employees exist
-        var fromEmployee = await _context.Employees.FindAsync(fromEmployeeId);
-        var toEmployee = await _context.Employees.FindAsync(toEmployeeId);
-
-        return fromEmployee != null && toEmployee != null;
     }
 }

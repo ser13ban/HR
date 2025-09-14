@@ -30,6 +30,26 @@
             <param name="token">JWT token to validate</param>
             <returns>Validation result</returns>
         </member>
+        <member name="T:HrAPI.Controllers.BaseController">
+            <summary>
+            Base controller providing common functionality for all API controllers
+            </summary>
+        </member>
+        <member name="M:HrAPI.Controllers.BaseController.GetCurrentUserId">
+            <summary>
+            Gets the current user's ID from the JWT token claims
+            </summary>
+            <returns>The current user's ID</returns>
+            <exception cref="T:System.UnauthorizedAccessException">Thrown when user ID is not found in token or is invalid</exception>
+        </member>
+        <member name="M:HrAPI.Controllers.BaseController.GetCurrentEmployeeId">
+            <summary>
+            Gets the current employee's ID from the JWT token claims
+            Alias for GetCurrentUserId() for better semantic meaning in employee contexts
+            </summary>
+            <returns>The current employee's ID</returns>
+            <exception cref="T:System.UnauthorizedAccessException">Thrown when employee ID is not found in token or is invalid</exception>
+        </member>
         <member name="T:HrAPI.Controllers.EmployeeController">
             <summary>
             Controller for employee operations

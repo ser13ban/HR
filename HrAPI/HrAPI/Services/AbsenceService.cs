@@ -8,10 +8,12 @@ namespace HrAPI.Services;
 public class AbsenceService : IAbsenceService
 {
     private readonly HrDbContext _context;
+    private readonly IAuthorizationService _authorizationService;
 
-    public AbsenceService(HrDbContext context)
+    public AbsenceService(HrDbContext context, IAuthorizationService authorizationService)
     {
         _context = context;
+        _authorizationService = authorizationService;
     }
 
     public async Task<IEnumerable<AbsenceRequestDto>> GetMyAbsenceRequestsAsync(int employeeId)
@@ -28,9 +30,9 @@ public class AbsenceService : IAbsenceService
 
     public async Task<IEnumerable<AbsenceRequestDto>> GetEmployeeAbsenceRequestsAsync(int employeeId, int requestingEmployeeId)
     {
-        // Check if requesting employee is a manager
-        var isManager = await IsEmployeeManagerAsync(requestingEmployeeId);
-        if (!isManager)
+        // Check if requesting employee can view these absence requests
+        var canView = await _authorizationService.CanViewAbsenceRequestsAsync(requestingEmployeeId, employeeId);
+        if (!canView)
         {
             throw new UnauthorizedAccessException("Only managers can view other employees' absence requests.");
         }
@@ -60,11 +62,7 @@ public class AbsenceService : IAbsenceService
     public async Task<IEnumerable<AbsenceRequestDto>> GetPendingApprovalsForManagerAsync(int managerId)
     {
         // Check if requesting employee is a manager
-        var isManager = await IsEmployeeManagerAsync(managerId);
-        if (!isManager)
-        {
-            throw new UnauthorizedAccessException("Only managers can view pending approvals.");
-        }
+        await _authorizationService.RequireManagerAsync(managerId);
 
         var absenceRequests = await _context.AbsenceRequests
             .Include(ar => ar.Employee)
@@ -129,11 +127,7 @@ public class AbsenceService : IAbsenceService
 
     public async Task<AbsenceRequestDto> ApproveAbsenceRequestAsync(int requestId, int approverId, ApprovalActionDto approvalDto)
     {
-        var isManager = await IsEmployeeManagerAsync(approverId);
-        if (!isManager)
-        {
-            throw new UnauthorizedAccessException("Only managers can approve absence requests.");
-        }
+        await _authorizationService.RequireAbsenceApprovalPermissionAsync(approverId);
 
         var absenceRequest = await _context.AbsenceRequests
             .Include(ar => ar.Employee)
@@ -168,11 +162,7 @@ public class AbsenceService : IAbsenceService
 
     public async Task<AbsenceRequestDto> DeclineAbsenceRequestAsync(int requestId, int approverId, ApprovalActionDto approvalDto)
     {
-        var isManager = await IsEmployeeManagerAsync(approverId);
-        if (!isManager)
-        {
-            throw new UnauthorizedAccessException("Only managers can decline absence requests.");
-        }
+        await _authorizationService.RequireAbsenceApprovalPermissionAsync(approverId);
 
         var absenceRequest = await _context.AbsenceRequests
             .Include(ar => ar.Employee)
@@ -227,13 +217,6 @@ public class AbsenceService : IAbsenceService
         return true;
     }
 
-    public async Task<bool> IsEmployeeManagerAsync(int employeeId)
-    {
-        var employee = await _context.Employees
-            .FirstOrDefaultAsync(e => e.Id == employeeId);
-
-        return employee?.Role == EmployeeRole.Manager;
-    }
 
     private static AbsenceRequestDto MapToDto(AbsenceRequest absenceRequest, bool excludeSensitiveInfo = false)
     {

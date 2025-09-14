@@ -2,14 +2,12 @@ using HrAPI.DTOs;
 using HrAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace HrAPI.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class AbsenceController : ControllerBase
+public class AbsenceController : BaseController
 {
     private readonly IAbsenceService _absenceService;
 
@@ -201,13 +199,4 @@ public class AbsenceController : ControllerBase
         }
     }
 
-    private int GetCurrentEmployeeId()
-    {
-        var employeeIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(employeeIdClaim) || !int.TryParse(employeeIdClaim, out var employeeId))
-        {
-            throw new UnauthorizedAccessException("Invalid employee ID in token.");
-        }
-        return employeeId;
-    }
 }

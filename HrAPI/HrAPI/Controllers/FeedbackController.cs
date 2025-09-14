@@ -6,16 +6,17 @@ using HrAPI.DTOs;
 
 namespace HrAPI.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class FeedbackController : ControllerBase
+public class FeedbackController : BaseController
 {
     private readonly IFeedbackService _feedbackService;
+    private readonly Services.IAuthorizationService _authorizationService;
 
-    public FeedbackController(IFeedbackService feedbackService)
+    public FeedbackController(IFeedbackService feedbackService, Services.IAuthorizationService authorizationService)
     {
         _feedbackService = feedbackService;
+        _authorizationService = authorizationService;
     }
 
     [HttpGet("received/{employeeId}")]
@@ -115,7 +116,7 @@ public class FeedbackController : ControllerBase
         try
         {
             var userId = GetCurrentUserId();
-            var canView = await _feedbackService.CanUserViewFeedbackAsync(employeeId, userId);
+            var canView = await _authorizationService.CanViewFeedbackAsync(userId, employeeId);
             return Ok(canView);
         }
         catch (Exception ex)
@@ -130,7 +131,7 @@ public class FeedbackController : ControllerBase
         try
         {
             var userId = GetCurrentUserId();
-            var canGive = await _feedbackService.CanUserGiveFeedbackAsync(employeeId, userId);
+            var canGive = await _authorizationService.CanGiveFeedbackAsync(userId, employeeId);
             return Ok(canGive);
         }
         catch (Exception ex)
@@ -139,13 +140,4 @@ public class FeedbackController : ControllerBase
         }
     }
 
-    private int GetCurrentUserId()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (int.TryParse(userIdClaim, out var userId))
-        {
-            return userId;
-        }
-        throw new UnauthorizedAccessException("User ID not found in token.");
-    }
 }

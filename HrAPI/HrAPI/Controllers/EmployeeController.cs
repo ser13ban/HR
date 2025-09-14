@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using HrAPI.DTOs;
 using HrAPI.Services;
 
@@ -9,10 +8,9 @@ namespace HrAPI.Controllers;
 /// <summary>
 /// Controller for employee operations
 /// </summary>
-[ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class EmployeeController : ControllerBase
+public class EmployeeController : BaseController
 {
     private readonly IEmployeeService _employeeService;
     private readonly ILogger<EmployeeController> _logger;
@@ -53,11 +51,7 @@ public class EmployeeController : ControllerBase
         try
         {
             // Get the requesting user's ID
-            var currentUserIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!int.TryParse(currentUserIdClaim, out var currentUserId))
-            {
-                return Unauthorized(new { message = "Invalid user token" });
-            }
+            var currentUserId = GetCurrentUserId();
 
             var employee = await _employeeService.GetEmployeeByIdAsync(id, currentUserId);
             if (employee == null)
@@ -103,11 +97,7 @@ public class EmployeeController : ControllerBase
             }
 
             // Get the requesting user's ID
-            var currentUserIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!int.TryParse(currentUserIdClaim, out var currentUserId))
-            {
-                return Unauthorized(new { message = "Invalid user token" });
-            }
+            var currentUserId = GetCurrentUserId();
 
             var updatedEmployee = await _employeeService.UpdateEmployeeAsync(id, updateDto, currentUserId);
             if (updatedEmployee == null)

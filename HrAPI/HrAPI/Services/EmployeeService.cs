@@ -10,11 +10,13 @@ public class EmployeeService : IEmployeeService
 {
     private readonly UserManager<Employee> _userManager;
     private readonly ILogger<EmployeeService> _logger;
+    private readonly IAuthorizationService _authorizationService;
 
-    public EmployeeService(UserManager<Employee> userManager, ILogger<EmployeeService> logger)
+    public EmployeeService(UserManager<Employee> userManager, ILogger<EmployeeService> logger, IAuthorizationService authorizationService)
     {
         _userManager = userManager;
         _logger = logger;
+        _authorizationService = authorizationService;
     }
 
     public async Task<IEnumerable<EmployeeListDto>> GetAllEmployeesAsync()
@@ -62,8 +64,9 @@ public class EmployeeService : IEmployeeService
             return null;
         }
 
-        // Determine if this is a limited view
-        var isLimitedView = DetermineIfLimitedView(requestingUserId, employeeId, currentUser.Role);
+        // Determine if this is a limited view using the authorization service
+        var canViewFullProfile = await _authorizationService.CanViewEmployeeProfileAsync(requestingUserId, employeeId);
+        var isLimitedView = !canViewFullProfile;
 
         // Map to DTO based on view permissions
         var profileDto = MapToProfileDto(employee, isLimitedView);
@@ -86,14 +89,8 @@ public class EmployeeService : IEmployeeService
             throw new UnauthorizedAccessException("User not found");
         }
 
-        // Check permissions: can edit own profile OR manager can edit any profile
-        var canEdit = requestingUserId == employeeId || 
-                     currentUser.Role == EmployeeRole.Manager;
-
-        if (!canEdit)
-        {
-            throw new UnauthorizedAccessException("You don't have permission to edit this profile");
-        }
+        // Check permissions using the authorization service
+        await _authorizationService.RequireEditEmployeeProfileAsync(requestingUserId, employeeId);
 
         // Get the employee to update
         var employee = await _userManager.FindByIdAsync(employeeId.ToString());
@@ -128,25 +125,13 @@ public class EmployeeService : IEmployeeService
         }
 
         // Return updated profile with appropriate permissions
-        var isLimitedView = DetermineIfLimitedView(requestingUserId, employeeId, currentUser.Role);
+        var canViewFullProfile = await _authorizationService.CanViewEmployeeProfileAsync(requestingUserId, employeeId);
+        var isLimitedView = !canViewFullProfile;
         var updatedDto = MapToProfileDto(employee, isLimitedView);
 
         return updatedDto;
     }
 
-    private static bool DetermineIfLimitedView(int currentUserId, int requestedEmployeeId, EmployeeRole currentUserRole)
-    {
-        // If viewing own profile, full access
-        if (currentUserId == requestedEmployeeId)
-            return false;
-
-        // If current user is Manager, full access to all profiles
-        if (currentUserRole == EmployeeRole.Manager)
-            return false;
-
-        // Otherwise, limited view (co-worker accessing another's profile)
-        return true;
-    }
 
     private static EmployeeProfileDto MapToProfileDto(Employee employee, bool isLimitedView)
     {
